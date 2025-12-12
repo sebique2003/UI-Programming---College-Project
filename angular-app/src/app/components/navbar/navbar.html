@@ -1,0 +1,66 @@
+<!-- Navigation Bar -->
+<nav class="navbar">
+  <div class="navbar-container">
+    
+    <!-- Logo -->
+    <div class="logo">
+      <span class="highlight">Workout</span> Tracker
+    </div>
+
+    <!-- Mobile menu toggle button (hamburger) -->
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Navigation links -->
+    <ul class="nav-links" [class.active]="menuActive">
+
+      <!-- Show username only when logged in (mobile view) -->
+      @if (isLoggedIn) {
+        <li class="mobile-username">{{ username }}</li>
+      }
+
+      <!-- Navigation items -->
+      <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Home</a></li>
+      <li><a routerLink="/workouts" routerLinkActive="active" (click)="closeMenu()">Workouts</a></li>
+      <li><a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a></li>
+
+      <!-- User section (logged in) -->
+      @if (isLoggedIn) {
+        <!-- Desktop version -->
+        <li class="user-info desktop-only">
+          <span class="username">{{ username }}</span>
+          <button class="logout-icon" (click)="toggleLogoutPopup()" title="Log out">⏻</button>
+        </li>
+
+        <!-- Mobile version -->
+        <li class="mobile-only">
+          <button class="logout-btn" (click)="toggleLogoutPopup()">Logout</button>
+        </li>
+
+      <!-- If not logged in, show login/signup button -->
+      } @else {
+        <li>
+          <button class="login-btn" (click)="goToAuth()">Log In / Sign Up</button>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <!-- Logout confirmation popup -->
+  @if (showLogoutPopup) {
+    <!-- Background blur when popup is open -->
+    <div class="logout-backdrop" (click)="cancelLogout()"></div>
+
+    <!-- Popup box -->
+    <div class="logout-popup">
+      <p>Ready to take a break, <strong>{{ username }}</strong>?</p>
+      <div class="popup-actions">
+        <button class="yes" (click)="confirmLogout()">Log Out</button>
+        <button class="no" (click)="cancelLogout()">Cancel</button>
+      </div>
+    </div>
+  }
+</nav>

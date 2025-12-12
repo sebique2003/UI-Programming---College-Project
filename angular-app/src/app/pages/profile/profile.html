@@ -1,0 +1,139 @@
+<!-- Main container for the profile page -->
+<div class="profile-container">
+  <!-- Popup / toast success -->
+  @if (showToast) {
+    <div class="toast">Your data has been saved successfully!</div>
+  }
+  <h1 class="profile-title"><span>My</span> Profile</h1>
+
+  <!-- If the user is NOT logged in -->
+  @if (!isLoggedIn) {
+    <div class="not-logged">
+      <p>You cannot view your profile because you are not logged in.</p>
+      <button class="auth-btn" routerLink="/auth">Log In</button>
+    </div>
+  }
+  <!-- If the user IS logged in -->
+  @else {
+    <!-- Section: Account information -->
+    <section class="section account-section">
+      <h3 class="section-title">Account Details</h3>
+      <div class="account-content">
+        <!-- User avatar displaying first letter of username -->
+        <div class="avatar">
+          <span>{{ user.username.charAt(0).toUpperCase() }}</span>
+        </div>
+        <!-- Display username and email -->
+        <div class="user-info">
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Editable user details -->
+    <section class="section">
+      <h3 class="section-title">User Details</h3>
+
+      <!-- If NOT editing, display user data -->
+      @if (!editing) {
+        @if (!userData.name && !userData.age && !userData.height && !userData.weight) {
+          <p class="empty-warning">You should complete this section and save your data.</p>
+        } @else {
+          <div class="details">
+            <p><strong>Name:</strong> {{ userData.name }}</p>
+            <p><strong>Age:</strong> {{ userData.age }}</p>
+            @if (userData.height) {
+              <p><strong>Height:</strong> {{ userData.height }} cm</p>
+            }
+            @if (userData.weight) {
+              <p><strong>Weight:</strong> {{ userData.weight }} kg</p>
+            }
+          </div>
+        }
+        <button class="edit-btn" (click)="editing = true">Edit</button>
+      }
+      <!-- If editing, show editable form -->
+      @else {
+        <div class="edit-form">
+          <input type="text" [(ngModel)]="userData.name" placeholder="Name" />
+          <input type="number" [(ngModel)]="userData.age" placeholder="Age" />
+          <input type="number" [(ngModel)]="userData.height" placeholder="Height (cm)" />
+          <input type="number" [(ngModel)]="userData.weight" placeholder="Weight (kg)" />
+          <div class="form-actions">
+            <button class="save-btn" (click)="saveData()">💾 Save</button>
+            <button class="cancel-btn" (click)="editing = false">✖ Cancel</button>
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- Section: Workout progress summary -->
+    <section class="section">
+      <h3 class="section-title">Workout Progress</h3>
+
+      <!-- If user has progress data -->
+      @if (getProgressKeys().length > 0) {
+        <div class="progress-grid">
+          @for (category of getProgressKeys(); track category) {
+            <div class="progress-card">
+              <h4>{{ category }}</h4>
+              <div class="underline"></div>
+              <p>
+                Done: <span>{{ categoryProgress[category] || 0 }}</span>
+              </p>
+            </div>
+          }
+        </div>
+      }
+      <!-- If no progress available -->
+      @else {
+        <p class="empty">You haven’t completed any workout categories yet.</p>
+      }
+    </section>
+
+    <!-- Section: Favorite workouts by category -->
+    <section class="section">
+      <h3 class="section-title">Favorite Workouts</h3>
+
+      <!-- If user has favorite categories -->
+      @if (getCategoryKeys().length > 0) {
+        @for (category of getCategoryKeys(); track category) {
+          <div class="favorite-category">
+            <div class="category-header">
+              <div class="category-title">
+                <h4>{{ category }}</h4>
+                <!-- Button to remove a category from favorites -->
+                <button class="remove-fav-btn" (click)="removeFavorite(category)">🗑</button>
+              </div>
+              <div class="underline"></div>
+            </div>
+
+            <!-- List of favorite workouts in this category -->
+            <div class="favorite-items">
+              @for (workout of favoriteCategories[category]; track workout.id) {
+                <div class="favorite-card">
+                  <h5>{{ workout.name }}</h5>
+                  <p>
+                    Sets: <span>{{ workout.sets }}</span>
+                    @if (workout.type === 'reps') {
+                      | Reps: <span>{{ workout.reps }}</span>
+                    } @else if (workout.type === 'time') {
+                      | Time: <span>{{ workout.duration }} min</span>
+                    } @else if (workout.type === 'distance') {
+                      | Distance: <span>{{ workout.distance }} km</span>
+                    }
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+      <!-- If no favorites -->
+      @else {
+        <p class="empty">You don't have any favorite workouts yet.</p>
+      }
+    </section>
+  }
+</div>

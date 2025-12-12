@@ -1,0 +1,75 @@
+<!-- Main authentication container -->
+<div class="auth-container">
+
+  <!-- Header section with welcome message -->
+  <div class="auth-header">
+    <h1>Welcome to <span>Workout Tracker</span></h1>
+    <p>Track your progress and build your personalized workout plan.</p>
+  </div>
+
+  <!-- Auth box (login / signup form) -->
+  <div class="auth-box">
+    <!-- Dynamic title depending on mode -->
+    <h2>{{ isSignup ? 'Sign Up' : 'Log In' }}</h2>
+
+    <!-- Auth form -->
+    <form (ngSubmit)="onSubmit()">
+      <!-- Username field (only visible in Sign Up mode) -->
+      @if (isSignup) {
+        <input
+          type="text"
+          placeholder="Enter a username"
+          [(ngModel)]="username"
+          name="username"
+          required
+        />
+      }
+
+      <!-- Email input -->
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+
+      <!-- Password input -->
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+
+      <!-- Confirm password (only visible in Sign Up mode) -->
+      @if (isSignup) {
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      }
+
+      <!-- Submit button -->
+      <button type="submit">
+        {{ isSignup ? 'Sign Up' : 'Log In' }}
+      </button>
+    </form>
+
+    <!-- Switch between login and signup -->
+    <p (click)="toggleMode()">
+      {{ isSignup ? 'Already have an account? Log In' : "Don't have an account? Sign Up" }}
+    </p>
+  </div>
+
+  <!-- Toast notification (shows success / error messages) -->
+  @if (toastMessage) {
+    <div class="toast-message" [class.show]="toastVisible" [ngClass]="toastType">
+      {{ toastMessage }}
+    </div>
+  }
+</div>

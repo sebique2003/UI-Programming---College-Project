@@ -1,0 +1,226 @@
+.create-container {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  padding: 4.5rem 4.5rem 2rem;
+  overflow-y: auto;
+}
+
+.create-header {
+  text-align: left;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 0.8s ease;
+}
+
+.create-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+}
+
+.create-header span {
+  color: #ff9800;
+}
+
+.create-header p {
+  color: #ccc;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.create-form {
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  animation: fadeInUp 0.8s ease;
+}
+
+.create-form input,
+.create-form select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.create-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.create-form input:focus,
+.create-form select:focus {
+  outline: none !important;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ff9800 !important;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.35);
+}
+
+.create-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+
+  background: rgba(255, 255, 255, 0.08) url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 12px center;
+  background-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.create-form select:hover {
+  border-color: rgba(255, 152, 0, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.25);
+}
+
+.create-form select option {
+  background: #1b1a3a;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  padding: 10px;
+}
+
+.create-form select:focus option:checked {
+  background: #ff9800;
+  color: #fff;
+}
+
+.type-label {
+  font-weight: 600;
+  color: #ffb84d;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  letter-spacing: 0.6px;
+}
+
+.create-form button {
+  margin-top: 16px;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff9800, #ff6d00);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-form button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #ffb300, #ff9100);
+  box-shadow: 0 0 12px rgba(255, 152, 0, 0.4);
+}
+
+.message,
+.error {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  z-index: 2000;
+  animation: 
+    slideDown 0.4s ease forwards,
+    fadeOutUp 0.6s ease 2.4s forwards;
+}
+
+.message {
+  background: linear-gradient(90deg, #43a047, #2e7d32);
+  box-shadow: 0 0 15px rgba(67, 160, 71, 0.4);
+}
+
+.message::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent #43a047 transparent;
+}
+
+.error {
+  background: linear-gradient(90deg, #e53935, #b71c1c);
+  box-shadow: 0 0 15px rgba(229, 57, 53, 0.4);
+}
+
+.error::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent #e53935 transparent;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+}

@@ -1,0 +1,58 @@
+<!-- Main container for the Home page -->
+<div class="home-container">
+  <!-- If the user is logged in -->
+  @if (isLoggedIn) {
+    <div class="home-content">
+      <!-- Page title -->
+      <h1 class="title"><span>Workout</span> Tracker</h1>
+      <h2 class="subtitle">Your progress. Your discipline. Your results.</h2>
+
+      <!-- Personalized greeting -->
+      <h3 class="hello">
+        Hello, <span>{{ username }}</span>! 👋
+      </h3>
+
+      <!-- Description / welcome text -->
+      <p class="description">
+        Welcome to the ultimate training companion where
+        you can create and customize your own workout plans, save your favorite workouts and log your progress.  
+        <br /><br/>
+        Access your <strong>Profile</strong> to review stats.
+        Manage your <strong>Workout Plan</strong> with full control, <b>Add</b>, <b>Edit</b>, or <b>Delete</b> exercises anytime.  
+        <br /><br />
+        This is more than a tracker, it’s your digital training partner, built to help you stay consistent, 
+        disciplined, and focused on what matters <span>"Your progress"</span>.
+      </p>
+
+      <!-- Action buttons for logged-in users -->
+      <div class="actions">
+        <button routerLink="/workouts" class="btn primary">View Workouts</button>
+        <button routerLink="/create" class="btn secondary">Create New Plan</button>
+      </div>
+    </div>
+  } 
+  <!-- If the user is NOT logged in -->
+  @else {
+    <div class="home-content guest">
+      <!-- Guest mode title -->
+      <h1 class="title"><span>Calisthenics</span> Tracker</h1>
+      <h2 class="subtitle">Your progress starts here 💪</h2>
+      <h3 class="hello">
+        Hello, <span>Guest</span>! 👋
+      </h3>
+
+      <!-- Guest info text -->
+      <p class="description">
+        Create your account to start your personalized workout plans, 
+        track your performance, and push your limits.
+      </p>
+
+      <!-- Sign up button -->
+      <div class="actions">
+        <button [routerLink]="['/auth']" [queryParams]="{ mode: 'signup' }" class="btn primary">
+          Register
+        </button>
+      </div>
+    </div>
+  }
+</div>

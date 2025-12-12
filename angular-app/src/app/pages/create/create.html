@@ -1,0 +1,97 @@
+<!-- Main container for the workout creation page -->
+<div class="create-container">
+
+  <!-- Header section with title and description -->
+  <div class="create-header">
+    <h1><span>Create</span> Workout Plan</h1>
+    <p>
+      Design your personalized workout by adding exercises with specific sets / reps / time / distance.
+    </p>
+  </div>
+
+  <!-- Workout creation form -->
+  <form class="create-form" (ngSubmit)="addWorkout()" autocomplete="off">
+    <!-- Category selector -->
+    <label class="type-label">Category</label>
+    <select [(ngModel)]="newWorkout.category" name="category" required>
+      <option value="Push">Push</option>
+      <option value="Pull">Pull</option>
+      <option value="Legs">Legs</option>
+      <option value="Core">Core</option>
+      <option value="Full Body">Full Body</option>
+      <option value="Cardio">Cardio</option>
+    </select>
+
+    <!-- Exercise name input -->
+    <input
+      type="text"
+      placeholder="Exercise name"
+      [(ngModel)]="newWorkout.name"
+      name="name"
+      required
+    />
+
+    <!-- Type selector (reps, time, or distance) -->
+    <label class="type-label">Type of Exercise</label>
+    <select [(ngModel)]="newWorkout.type" name="type" required>
+      <option value="reps" selected>Repetitions</option>
+      <option value="time">Time (minutes)</option>
+      <option value="distance">Distance (km)</option>
+    </select>
+
+    <!-- Sets input -->
+    <input
+      type="number"
+      placeholder="Sets"
+      [(ngModel)]="newWorkout.sets"
+      name="sets"
+      min="1"
+      required
+    />
+
+    <!-- Show the correct input depending on the exercise type -->
+    @if (newWorkout.type === 'reps' || !newWorkout.type) {
+      <!-- Reps input -->
+      <input
+        type="number"
+        placeholder="Reps"
+        [(ngModel)]="newWorkout.reps"
+        name="reps"
+        min="1"
+        required
+      />
+    } @else if (newWorkout.type === 'time') {
+      <!-- Duration input -->
+      <input
+        type="number"
+        placeholder="Duration (minutes)"
+        [(ngModel)]="newWorkout.duration"
+        name="duration"
+        min="1"
+        required
+      />
+    } @else if (newWorkout.type === 'distance') {
+      <!-- Distance input -->
+      <input
+        type="number"
+        placeholder="Distance (km)"
+        [(ngModel)]="newWorkout.distance"
+        name="distance"
+        min="0.1"
+        step="0.1"
+        required
+      />
+    }
+
+    <!-- Submit button -->
+    <button type="submit">Save Exercise</button>
+  </form>
+
+  <!-- Success and error messages -->
+  @if (message) {
+    <p class="message">{{ message }}</p>
+  }
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+</div>

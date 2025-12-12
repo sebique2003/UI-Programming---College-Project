@@ -1,0 +1,164 @@
+<!-- Main container for the workouts page -->
+<div class="workouts-container">
+  <div class="workouts-header">
+    <h1><span>My</span> Workouts</h1>
+  </div>
+
+  <!-- If the user is NOT logged in -->
+  @if (!isLoggedIn) {
+    <div class="empty not-logged">
+      <p>To view or create workouts, you need to have an account.</p>
+      <button class="create-btn" routerLink="/auth">Log In / Sign Up</button>
+    </div>
+  } 
+  <!-- If the user IS logged in -->
+  @else {
+    <div class="workouts-list">
+
+      <!-- If no workouts exist -->
+      @if (workouts.length === 0) {
+        <div class="empty">
+          <p>You don’t have any workouts yet.</p>
+          <button class="create-btn" routerLink="/create">➕ Create one now</button>
+        </div>
+      } 
+      <!-- If workouts exist -->
+      @else {
+        <!-- Loop through each category -->
+        @for (category of categories; track category) {
+          <div class="category-block">
+
+            <!-- Category title and action buttons -->
+            <div class="category-header">
+              <div class="category-title-group">
+                <h3 class="category-title">{{ category }}</h3>
+                <div class="category-actions">
+                  <!-- Mark category as done -->
+                  <button class="done-btn" (click)="markCategoryAsDone(category)">✅</button>
+
+                  <!-- Toggle favorite category -->
+                  <button class="favorite-btn" (click)="toggleCategoryFavorite(category)">
+                    {{ isCategoryFavorite(category) ? '❤️' : '🤍' }}
+                  </button>
+
+                  <!-- Delete entire category -->
+                  <button class="delete-category-btn" (click)="openDeleteCategoryPopup(category)">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+              <div class="underline"></div>
+            </div>
+
+            <!-- List workouts inside the category -->
+            @for (workout of groupedWorkouts[category]; track workout.id) {
+              <div class="workout-card">
+
+                <!-- Edit form for a workout -->
+                @if (editingWorkout && editingWorkout.id === workout.id) {
+                  <div class="edit-form">
+                    <input type="text" [(ngModel)]="editedName" placeholder="Exercise name" />
+                    <input type="number" [(ngModel)]="editedSets" placeholder="Sets" min="1" />
+
+                    <!-- Select type of exercise -->
+                    <select [(ngModel)]="editedType">
+                      <option value="reps">Reps</option>
+                      <option value="time">Time</option>
+                      <option value="distance">Distance</option>
+                    </select>
+
+                    <!-- Conditional inputs depending on selected type -->
+                    @if (editedType === 'reps') {
+                      <input type="number" [(ngModel)]="editedReps" placeholder="Reps" min="1" />
+                    }
+                    @if (editedType === 'time') {
+                      <input
+                        type="text"
+                        [(ngModel)]="editedDuration"
+                        placeholder="Duration (e.g. 1 min)"
+                      />
+                    }
+                    @if (editedType === 'distance') {
+                      <input
+                        type="text"
+                        [(ngModel)]="editedDistance"
+                        placeholder="Distance (e.g. 1 km)"
+                      />
+                    }
+
+                    <!-- Save and cancel edit buttons -->
+                    <button class="save" (click)="saveEdit()">💾 Save</button>
+                    <button class="cancel" (click)="cancelEdit()">✖ Cancel</button>
+                  </div>
+                } 
+                <!-- Display workout info (when not editing) -->
+                @else {
+                  <div>
+                    <h4>{{ workout.name }}</h4>
+                    <p>
+                      Sets: <span>{{ workout.sets }}</span> |
+                      @if (workout.type === 'reps') {
+                        Reps: <span>{{ workout.reps }}</span>
+                      } 
+                      @else if (workout.type === 'time') {
+                        Time: <span>{{ workout.duration }} min</span>
+                      } 
+                      @else if (workout.type === 'distance') {
+                        Distance: <span>{{ workout.distance }} km</span>
+                      }
+                    </p>
+                  </div>
+
+                  <!-- Edit and delete buttons for the workout -->
+                  <div class="actions">
+                    <button class="edit" (click)="editWorkout(workout)">✏️</button>
+                    <button class="delete" (click)="openDeleteExercisePopup(workout.id)">🗑️</button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Add new workout button -->
+        <div class="workout-card add-card" routerLink="/create">
+          <div class="add-content">
+            <span class="plus">➕</span>
+            <p>Add new workout</p>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Popup for deleting an exercise -->
+@if (showDeleteExercisePopup) {
+  <div class="delete-popup-backdrop" (click)="cancelDeleteExercise()"></div>
+  <div class="delete-popup animate-popup">
+    <h4>Delete Exercise?</h4>
+    <p>This action will remove the selected exercise from your workouts.</p>
+    <div class="popup-actions">
+      <button class="yes" (click)="confirmDeleteExercise()">Yes</button>
+      <button class="no" (click)="cancelDeleteExercise()">Cancel</button>
+    </div>
+  </div>
+}
+
+<!-- Popup for deleting a whole category -->
+@if (showDeleteCategoryPopup) {
+  <div class="delete-popup-backdrop" (click)="cancelDeleteCategory()"></div>
+  <div class="delete-popup animate-popup">
+    <h4>Delete Entire Category?</h4>
+    <p>Once deleted, all workouts and progress in this category will be lost forever.</p>
+    <div class="popup-actions">
+      <button class="yes" (click)="confirmDeleteCategory()">Yes</button>
+      <button class="no" (click)="cancelDeleteCategory()">Cancel</button>
+    </div>
+  </div>
+}
+
+<!-- Toast notification for quick messages -->
+@if (toastMessage) {
+  <div class="toast-message" [class.show]="toastVisible" [innerHTML]="toastMessage"></div>
+}
